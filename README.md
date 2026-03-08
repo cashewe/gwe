@@ -5,3 +5,7 @@
 the solution uses a structured ontology to ensure cross compatibility for all outcomes, and makes liberal use of ml / ai models to extract, label and construct the knowledge graph.
 
 built in rust because its fun, delivered in python because otherwise itll never get used :(
+
+The eventual goal of `gwe` is to provide the building blocks for a knoweldge graph for graphRAG - but im thinking ti may have some additional benefit jsut for extracting information from documents - so maybe one feature might be a UI this time?
+
+I really dont want to learn REACT or whatever though so if we do want a UI, maybe ill try for a claude code one-bang there...
