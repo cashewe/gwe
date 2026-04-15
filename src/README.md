@@ -47,7 +47,7 @@ WrappedEntity:
     ontological_mapping: str // resolved position in the ontology
     relationships: list[Relationship] // collective set of all relationships from members
     references: list[Reference] // list of locations all entities are referenced
-    aliases: list[uuid4] // ids of all entities mapped into this one
+    aliases: list[EntityId] // ids of all entities mapped into this one
 
 EntityOntologicalElement:
     id: OntologyId // unqiue ref for this layer of ontology

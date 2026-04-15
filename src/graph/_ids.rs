@@ -52,5 +52,8 @@ id_type!(EntityId);
 /// unique ref for a relationship between two entities
 id_type!(RelationshipId);
 
+/// unique ref for References lol what a world
+id_type!(ReferenceId);
+
 /// unqiue ref for an obect in an ontology? do i need one for relationships too?
 id_type!(OntologyId);
