@@ -57,3 +57,6 @@ id_type!(ReferenceId);
 
 /// unqiue ref for an obect in an ontology? do i need one for relationships too?
 id_type!(OntologyId);
+
+/// unique ref for a source document... this is getting a tad ridiculous ngl
+id_type!(DocumentId);
