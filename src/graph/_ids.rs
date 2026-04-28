@@ -49,6 +49,9 @@ macro_rules! id_type {
 /// unique ref for a given entity
 id_type!(EntityId);
 
+/// unique ref for a collection of entities
+id_type!(EntityCollectionId);
+
 /// unique ref for a relationship between two entities
 id_type!(RelationshipId);
 

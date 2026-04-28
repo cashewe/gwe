@@ -1,15 +1,15 @@
 use std::fmt;
 use std::collections::HashMap;
 use serde::{Serialize, Deserialize};
-use crate::graph::{Reference, Relationship, Entity, EntityId};
+use crate::graph::{Reference, Relationship, Entity, EntityId, EntityCollectionId};
 
 /// big fatty papa oh man
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Graph {
     // --- entities ---
-    entities: Vec<Vec<EntityId>>, // public facing entities
+    entities: Vec<EntityCollectionId>, // public facing entities
     raw_entities: Vec<Entity>, // all underlying entities, premerge
-    entity_lookup: HashMap<EntityId, usize>, // merge map to reduce lookup count
+    entity_lookup: HashMap<EntityId, EntityCollectionId>, // can this be invertible?
 
     relationships: Vec<Relationship>,
     references: Vec<Reference>,
@@ -20,7 +20,7 @@ pub struct Graph {
 /// allow users to easily view the graph
 impl fmt::Display for Graph {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Graph({} entities, {} relationships)", self.entities.len() self.relationships.len())
+        write!(f, "Graph({} entities, {} relationships)", self.entities.len(), self.relationships.len())
     }
 }
 
@@ -49,8 +49,10 @@ impl Graph {
         }
     }
 
-    /// merge two or more entities by id#
-    /// used to clean messy NER etc...
+    /// merge two or more underlying entities into a single entity
+    /// works by:
+    /// mapping all entities in the list into the left most entities ID
+    /// removing any newly empty entitycollectionids from the hashmap.
     pub fn merge_entities(&mut self, ids: &[EntityId]) {
         if ids.is_empty() {
             return;
@@ -91,22 +93,18 @@ impl Graph {
     }
 
     /// remove an entity from its current grouping
-    /// might infrequently need this if you overshoot on merges?
+    /// handled by changing the id we map the entity to to a brand new one
+    /// i dont think there are any edge cases here...
     pub fn separate_entity(&mut self, id: EntityId) {
-        let Some(&group_idx) = self.entity_index.get(&id) else {
-            return;
-        };
-        let group = &mut self.entities[group_idx];
+        let new_id = EntityCollectionId::new();
+        
+        self.entities.push(new_id);
 
-        if group.len() == 1 {
-            return; // already isolated
+        // add the lookup
+        if let Some(entry) = self.entity_lookup.get_mut(&id) {
+            *entry = new_id;
+        } else {
+            self.entity_lookup.insert(id, new_id);
         }
-
-        if let Some(pos) = group.iter().position(|&x| x == id) {
-            group.swap_remove(pos);
-        }
-        let new_idx = self.entities.len();
-        self.entities.push(vec![id]);
-        self.entity_index.insert(id, new_idx);
     }
 }
