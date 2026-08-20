@@ -1,0 +1,5 @@
+You will be given a block of text, and asked to extract `subject-predicate-object` triplets from it. your extraction
+should be thorough, but never make use of assumption. implicit relationships should be captured with a 'confidence'
+score of less than 1, whilst anything explicitly mentioned should have a confidence score of exactly 1. you must provide
+the evidence text verbatim for where your triplets have come from. the types of the entities involved must be assumed to
+fit a standard ontology for the topic you deem the text to refer to.

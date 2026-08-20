@@ -1,0 +1,99 @@
+Your task is to extract **all meaningful subject–predicate–object relationships established by the source text**.
+
+For every relationship, return:
+
+* `subject`: the specific entity that participates in the relationship.
+* `predicate`: a short, precise description of the relationship.
+* `object`: the specific entity to which the relationship applies.
+* `certainty`: how directly the relationship is established by the source text.
+* `evidence`: the exact sentence or sentences from the source text that support the relationship.
+
+## Certainty
+
+Use exactly one of these values:
+
+* `explicit`: The source text directly states the relationship. Use this whenever the relationship can be obtained directly from the text, including relationships expressed using pronouns or other references that can be resolved unambiguously.
+* `strongly_implicit`: The relationship is not directly stated as a triplet, but is an immediate and unambiguous consequence of what the text says. No substantial interpretation is required.
+* `moderately_implicit`: The relationship is strongly suggested by the text, but requires some semantic interpretation or combining information from multiple statements.
+* `weakly_implicit`: The relationship is plausible from the text but requires a meaningful inference. Include these only when the text provides genuine supporting evidence.
+
+## Rules
+
+1. **Be exhaustive.** Extract every meaningful relationship established by the text, including relationships between entities that are not expressed as conventional grammatical subject–object constructions.
+
+2. **Prefer explicit relationships.** If a relationship is directly stated, classify it as `explicit`.
+
+3. **Capture implicit relationships.** The purpose of this extraction is not merely grammatical dependency parsing. Extract relationships that the text establishes through context, reference, semantic composition, or clear implication.
+
+4. **Never invent facts.** Every relationship must be supported by the source text. Do not introduce relationships using general world knowledge, assumptions about how the world normally works, or information that is not present in the text.
+
+5. **Resolve references.** Resolve pronouns and referring expressions such as `it`, `they`, `this`, `these`, `the former`, `the latter`, and `the researchers` when their referent is clear. A relationship expressed through an unambiguous reference is still `explicit`.
+
+6. **Distinguish indirect wording from implicit relationships.** A relationship does not become implicit merely because it is expressed indirectly.
+
+   For example:
+
+   "The paper was published in 2020. It introduced a new method."
+
+   produces:
+
+   `paper → introduced → method`
+
+   with `certainty = explicit`.
+
+   The pronoun `it` requires reference resolution, but the relationship itself is explicitly stated.
+
+7. **Extract semantic relationships.** Look beyond grammatical structure. For example:
+
+   "Each node represented a person."
+
+   produces:
+
+   `node → represents → person`
+
+   Even though the text describes the relationship through a definitional construction.
+
+8. **Recover strongly implicit relationships.** For example:
+
+   "The agreement between the datasets increased confidence in the conclusion."
+
+   may establish:
+
+   `dataset1 → agree_with → dataset2`
+
+   if the meaning of "agreement between the datasets" unambiguously establishes that relationship. Classify it as `strongly_implicit`, because the relationship is established semantically but is not expressed as a conventional subject–predicate–object statement.
+
+9. **Use moderate or weak inference sparingly.** Do not turn every association into a relationship. A relationship should only be `moderately_implicit` or `weakly_implicit` when the surrounding text provides substantive evidence for the inference.
+
+10. **Decompose compound statements.** If a sentence establishes multiple independent relationships, extract each one separately.
+
+11. **Prefer specific entities.** Extract the entity instance referred to by the text rather than replacing it with a generic class. If the text says `Paul`, use `Paul`, not `person`.
+
+12. **Entity types are ontological.** Assign each entity the most specific semantic type that the text supports, such as `person`, `organisation`, `document`, `event`, `place`, `concept`, `method`, `dataset`, `object`, or `property`.
+
+13. **Predicates must be concise and canonical.** Prefer short relationship descriptions such as `works_for`, `describes`, `represents`, `contains`, `caused`, `located_in`, or `supports`. Use equivalent predicates consistently.
+
+14. **Do not force every entity into a triplet.** Extract only meaningful relationships. The presence of two entities in the same sentence does not necessarily establish a relationship between them.
+
+15. **Evidence must be verbatim.** Every relationship must include the exact sentence or sentences from the source text that support it. Do not paraphrase, correct, summarise, or alter the evidence.
+
+16. **Evidence may support an inference.** For an implicit relationship, provide the sentence or sentences from which the relationship is inferred. The evidence itself must remain verbatim.
+
+17. **Certainty describes textual support, not factual truth.** `explicit` means that the text explicitly establishes the relationship; it does not mean that the relationship is objectively true.
+
+18. **When uncertain, prefer omission over invention.** A speculative relationship is worse than a missing weak relationship. Only extract a weakly implicit relationship when there is actual textual evidence supporting the inference.
+
+## Extraction objective
+
+The goal is to construct a **semantic relationship graph of the source text**, rather than merely identify grammatical triplets.
+
+Extract:
+
+* relationships explicitly stated;
+* relationships established through unambiguous reference resolution;
+* relationships that are immediate semantic consequences of statements;
+* relationships that emerge when multiple statements jointly establish a connection.
+
+Do not extract relationships that require knowledge external to the source text.
+
+Return only data conforming to the supplied `RelationshipModel` schema. Do not provide explanations, commentary, or prose outside the structured output.
