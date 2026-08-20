@@ -1,13 +1,19 @@
 # gwe
 
-`gwe` meaning 'web' (as in spider) is a package for extracting relationship structures from linear text - and in particular from chunked text.
+`gwe` meaning 'web' (as in spider) is a package for extracting relationship structures from linear text - originally intended to be used to provide targetted context to surfaced chunks in RAG systems.
 
-the solution uses a structured ontology to ensure cross compatibility for all outcomes, and makes liberal use of ml / ai models to extract, label and construct the knowledge graph.
+its goal is to slot into a toolkit for context management alonside `darn` and `adran`, but this time focusing not on text but on relationships. a theoretical user might surface a chunk made by `darn` which mentions a bloke, expand it to the whole section using `adran` to discover hes associated with a given organisation and then find out about who else works for that organisation via `gwe`
 
-built in rust because its fun, delivered in python because otherwise itll never get used :(
+at its core, we want the following principles:
+- BYOM
+- user editable graph, requires human legible output formats
+- relationship first approach, entities exist only in relation to one another
+- self healing ontology using novel embedding approach to propose merges between similar objects in a reversable way
+- super easy to use interface, dont make the users learn an entire query language just for this tool
+- any learned information could theoretically be used by a different tool if the user wanted to migrate off (i.e. simple json data)
 
-The eventual goal of `gwe` is to provide the building blocks for a knoweldge graph for graphRAG - but im thinking ti may have some additional benefit jsut for extracting information from documents - so maybe one feature might be a UI this time?
+## possible follow ons
 
-I really dont want to learn REACT or whatever though so if we do want a UI, maybe ill try for a claude code one-bang there...
-
-the goal with the design is to appreciate that any fully automatic means of constructing a graph is likely to have issues, and therefore to construct in a way that allows users to edit the underlying structure as ergonomically as possible. given users may get it wrong, we ideally want to keep these edits reversible.
+1. mcp server option in which we allow an agent to ask gwe questions directly - might help with agentic rag
+2. simple ui tool in which user uploads a document and is able to read it via relationship graph rather than from top to bottom
+3. an end to end rag that uses both `adran` and `gwe` to manage the context of the chunks its surfaces, created via `darn`
