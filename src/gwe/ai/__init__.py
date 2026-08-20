@@ -1,19 +1,7 @@
-from .gateway import (
-    AiConfig,
-    AiGateway,
-)
-from .relationship_model import (
-    Certainty,
-    Entity,
-    RelationshipModel,
-    Triplet,
-)
+from .config import AiConfig
+from .gateway import AiGateway
 
 __all__ = [
     "AiConfig",
     "AiGateway",
-    "Certainty",
-    "Entity",
-    "RelationshipModel",
-    "Triplet",
 ]

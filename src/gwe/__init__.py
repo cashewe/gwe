@@ -1,17 +1,11 @@
 from .ai import (
     AiConfig,
-    AiGateway,
-    Certainty,
-    Entity,
-    RelationshipModel,
-    Triplet,
+)
+from .processor.relationship_model import (
+    Processor,
 )
 
 __all__ = [
     "AiConfig",
-    "AiGateway",
-    "Certainty",
-    "Entity",
-    "RelationshipModel",
-    "Triplet",
+    "Processor",
 ]
