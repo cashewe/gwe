@@ -1,4 +1,5 @@
 import time
+from importlib.resources import files
 
 from typing import (
     Any,
@@ -56,8 +57,11 @@ class AiGateway():
         self.config = config
         self.max_retries = 3
 
-        with open("prompts/triplet_extraction_v2.txt", "r", encoding="utf-8") as file:
-            self._system_prompt = file.read() # might need to not do this here...
+        self._system_prompt = (
+            files("gwe.ai")
+            .joinpath("prompts", "triplet_extraction_v2.txt")
+            .read_text(encoding="utf-8")
+        )
 
     def chat(
         self, 
